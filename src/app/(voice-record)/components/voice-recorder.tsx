@@ -1,11 +1,11 @@
 'use client'
 
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { Mic, MicOff, Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { Button } from '@/ui/button'
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 export const VoiceRecorder = () => {
   const [isProcessing, setIsProcessing] = useState(false)
