@@ -1,0 +1,53 @@
+import { ALERT_CRITICAL_KEYS, NEGATIVE_KEYS, NEUTRAL_KEYS, POSITIVE_KEYS, PROCESS_KEYS } from './common-status-keys'
+
+export const STATUS_LABELS = {
+  // POSITIVE_KEYS
+  [POSITIVE_KEYS.OPEN]: 'Abierto',
+  [POSITIVE_KEYS.ONLINE]: 'En línea',
+  [POSITIVE_KEYS.ACTIVE]: 'Activo',
+  [POSITIVE_KEYS.DONE]: 'Hecho',
+  [POSITIVE_KEYS.VERIFIED]: 'Verificado',
+  [POSITIVE_KEYS.AVAILABLE]: 'Disponible',
+  [POSITIVE_KEYS.UPDATED]: 'Actualizado',
+  [POSITIVE_KEYS.CREATED]: 'Creado',
+  [POSITIVE_KEYS.OPERATIVE]: 'Operativo',
+  [POSITIVE_KEYS.ASSIGNED]: 'Asignado',
+  [POSITIVE_KEYS.COMPLETED]: 'Completado',
+  [POSITIVE_KEYS.CONFIRMED]: 'Confirmado',
+  [POSITIVE_KEYS.AUTOMATED]: 'Automatizado',
+  [POSITIVE_KEYS.AFFILIATED]: 'Afiliado',
+
+  // PROCESS_KEYS
+  [PROCESS_KEYS.IN_PROGRESS]: 'En progreso',
+  [PROCESS_KEYS.IN_PROCESS]: 'En proceso',
+  [PROCESS_KEYS.INCOMING]: 'Entrante',
+  [PROCESS_KEYS.IN_CHECK]: 'En revisión',
+  [PROCESS_KEYS.PENDING]: 'Pendiente',
+  [PROCESS_KEYS.VERIFIED_ARRIVAL]: 'Llegada verificada',
+  [PROCESS_KEYS.UNDER_MAINTENANCE]: 'En mantenimiento',
+  [PROCESS_KEYS.UNDER_CONSTRUCTION]: 'En construcción',
+  [PROCESS_KEYS.VERIFIED_REFILLING]: 'Relleno verificado',
+  [PROCESS_KEYS.PENDING_VERIFICATION]: 'Verificación pendiente',
+
+  // NEGATIVE_KEYS
+  [NEGATIVE_KEYS.CLOSED]: 'Cerrado',
+  [NEGATIVE_KEYS.DAMAGED]: 'Dañado',
+  [NEGATIVE_KEYS.OFFLINE]: 'Fuera de línea',
+  [NEGATIVE_KEYS.BLOQUED]: 'Bloqueado',
+  [NEGATIVE_KEYS.BLOCKED]: 'Bloqueado',
+  [NEGATIVE_KEYS.DELETED]: 'Eliminado',
+  [NEGATIVE_KEYS.REMOVED]: 'Eliminado',
+  [NEGATIVE_KEYS.SUSPENDED]: 'Suspendido',
+  [NEGATIVE_KEYS.INOPERATIVE]: 'Inoperativo',
+  [NEGATIVE_KEYS.OUT_OF_STOCK]: 'Sin stock',
+  [NEGATIVE_KEYS.INACTIVE]: 'Inactivo',
+  [NEGATIVE_KEYS.DISABLED]: 'Desactivado',
+  [NEGATIVE_KEYS.CANCELLED]: 'Cancelado',
+  [NEGATIVE_KEYS.NOT_AUTOMATED]: 'No automatizado',
+
+  // ALERT_CRITICAL_KEYS
+  [ALERT_CRITICAL_KEYS.UNASSIGNED]: 'No asignado',
+  [ALERT_CRITICAL_KEYS.UNAVAILABLE]: 'No disponible',
+  [ALERT_CRITICAL_KEYS.UNAFFILIATED]: 'No afiliado',
+  [ALERT_CRITICAL_KEYS.OUT_OF_SERVICE]: 'Fuera de servicio',
+} as const
