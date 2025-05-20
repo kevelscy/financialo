@@ -10,6 +10,9 @@ export const AuthProvider = ({ children }) => {
         formFieldLabel__emailAddress_username: 'Correo o nombre de usuario',
         formFieldInputPlaceholder__emailAddress_username: 'Ingrese un correo o un nombre de usuario',
         badge__activePlan: 'Activo',
+        formFieldLabel__firstName: 'Nombre',
+        formFieldLabel__lastName: 'Apellido',
+        formFieldInputPlaceholder__phoneNumber: 'Ingrese su numero telefónico',
         badge__upcomingPlan: 'Próximo',
         commerce: {
           ...esMX.commerce,
