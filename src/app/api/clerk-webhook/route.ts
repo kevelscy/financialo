@@ -1,51 +1,31 @@
-import { WebhookEvent } from '@clerk/nextjs/server'
-import { headers } from 'next/headers'
-import { Webhook } from 'svix'
+import { QueryUsers } from '@/shared/lib/services/firebase'
+import { verifyWebhook } from '@clerk/nextjs/webhooks'
+import { NextRequest } from 'next/server'
 
-import { QueryUsers } from '@/shared/lib/services/firebase/queries/users'
-
-export async function POST(req: Request) {
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
-
-  if (!WEBHOOK_SECRET) {
-    throw new Error('CLERK_WEBHOOK_SECRET no configurado')
-  }
-
-  const headerPayload = await headers()
-  const svix_id = headerPayload.get('svix-id')
-  const svix_timestamp = headerPayload.get('svix-timestamp')
-  const svix_signature = headerPayload.get('svix-signature')
-
-  if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('Error en los headers', { status: 400 })
-  }
-
-  const payload = await req.json()
-  const wh = new Webhook(WEBHOOK_SECRET)
-  let evt: WebhookEvent
-
+export async function POST(req: NextRequest) {
   try {
-    evt = wh.verify(JSON.stringify(payload), {
-      'svix-id': svix_id,
-      'svix-timestamp': svix_timestamp,
-      'svix-signature': svix_signature,
-    }) as WebhookEvent
+    const clerkEvent = await verifyWebhook(req)
+
+    const { id } = clerkEvent.data
+    const eventType = clerkEvent.type
+    console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
+    console.log('Webhook payload:', clerkEvent.data)
+
+    if (eventType === 'user.created') {
+      const { id, email_addresses, first_name, last_name, image_url } = clerkEvent.data
+
+      await QueryUsers.createOrUpdateUser({
+        id,
+        email: email_addresses[0]?.email_address || '',
+        firstName: first_name,
+        lastName: last_name,
+        imageUrl: image_url
+      })
+    }
+
+    return new Response('Webhook received', { status: 200 })
   } catch (err) {
-    return new Response('Firma inválida', { status: 400 })
+    console.error('Error verifying webhook:', err)
+    return new Response('Error verifying webhook', { status: 400 })
   }
-
-  // Manejar eventos de creación/actualización de usuarios
-  if (evt.type === 'user.created' || evt.type === 'user.updated') {
-    const { id, email_addresses, first_name, last_name, image_url } = evt.data
-
-    await QueryUsers.createOrUpdateUser({
-      id,
-      email: email_addresses[0]?.email_address || '',
-      firstName: first_name,
-      lastName: last_name,
-      imageUrl: image_url
-    })
-  }
-
-  return new Response('', { status: 200 })
 }
