@@ -1,7 +1,7 @@
 'use client'
 
 import { type ReactNode, type HTMLAttributes, useRef, useEffect, useState } from 'react'
-import { UseFormReturn } from 'react-hook-form'
+import { Path, UseFormReturn } from 'react-hook-form'
 
 import { cn } from '@/shared/lib/utils/tailwind'
 
@@ -17,13 +17,13 @@ export interface ISelectItem {
   disabled?: boolean
 }
 
-export interface IGenericSelectProps extends HTMLAttributes<HTMLDivElement> {
+export interface IGenericSelectProps<TForm> extends HTMLAttributes<HTMLDivElement> {
   defaultValue?: string
   placeholder?: string
   tabIndex?: number
   items: ISelectItem[]
-  id: string
-  form: UseFormReturn<any, any, any>
+  id: Path<TForm>
+  form: UseFormReturn<TForm, any, any>
   label?: string
   classNameContainer?: string
   classNameSelect?: string
@@ -33,10 +33,9 @@ export interface IGenericSelectProps extends HTMLAttributes<HTMLDivElement> {
   loading?: boolean
 }
 
-export const SelectForm = ({
+export function SelectForm<TForm = any>({
   id,
   label,
-  defaultValue,
   placeholder,
   description,
   items,
@@ -47,7 +46,7 @@ export const SelectForm = ({
   classNameGroup,
   disabled,
   loading
-}: IGenericSelectProps) => {
+}: IGenericSelectProps<TForm>) {
   const selectRef = useRef<HTMLButtonElement>(null);
   const [elementWidth, setElementWidth] = useState<number | null>(null);
 
@@ -84,12 +83,10 @@ export const SelectForm = ({
       <FormField
         control={form.control}
         name={id}
-        defaultValue={defaultValue}
         render={({ field, formState }) => (
-          <FormItem className={cn('w-full space-y-0', classNameContainer)}>
+          <FormItem className={cn('w-full space-y-0 gap-0', classNameContainer)}>
             <div className='flex flex-col justify-start items-start'>
               {label && <FormLabel className='font-semibold text-sm'>{label}</FormLabel>}
-              <FormMessage className='text-xs font-normal' />
             </div>
 
             {description && (<FormDescription className='text-xs'>{description}</FormDescription>)}
@@ -142,6 +139,8 @@ export const SelectForm = ({
                 </SelectGroup>
               </SelectContent>
             </Select>
+
+            <FormMessage className='text-xs font-normal mt-1' />
           </FormItem>
         )}
       />

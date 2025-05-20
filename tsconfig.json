@@ -29,7 +29,13 @@
         "./src/*"
       ],
       "@/home/*": [
-        "./src/app/(home)*"
+        "./src/app/(home)/*"
+      ],
+      "@/transactions/*": [
+        "./src/app/(transactions)/*"
+      ],
+      "@/shared/*": [
+        "./src/shared/*"
       ],
       "@/ui/*": [
         "./src/shared/components/ui/*"

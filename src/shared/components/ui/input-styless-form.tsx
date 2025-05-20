@@ -8,7 +8,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Skeleton } from '@/ui/skeleton'
 import { Input } from './input'
 
-export function InputForm<TForm>(props: InputFormProps<TForm>) {
+export function InputStylessForm<TForm>(props: InputFormProps<TForm>) {
   const { children, form, id, label, classNameContainer, description, icon, loading: isLoading, iconDirection = 'left', ...rest } = props
 
   if (isLoading) {
@@ -35,9 +35,9 @@ export function InputForm<TForm>(props: InputFormProps<TForm>) {
       name={id as Path<TForm>}
       render={({ field }) => (
         <FormItem className={cn('w-full space-y-0 gap-0', classNameContainer)}>
-          <div className='flex flex-col justify-start items-start'>
+          {/* <div className='flex flex-col justify-start items-start'>
             {label && <FormLabel className='font-semibold text-sm'>{label}</FormLabel>}
-          </div>
+          </div> */}
 
           {description && (<FormDescription className='text-xs'>{description}</FormDescription>)}
 
@@ -56,7 +56,11 @@ export function InputForm<TForm>(props: InputFormProps<TForm>) {
                 {...rest}
                 disabled={rest?.disabled}
                 tabIndex={rest?.tabIndex}
-                className={cn(validateInputIconClassNames({ iconDirection, icon, type: rest.type }), rest?.className)}
+                className={cn(
+                  'border-none font-bold text-xl md:text-3xl text-zinc-700 focus-visible:border-none focus-visible:outline-none',
+                  validateInputIconClassNames({ iconDirection, icon, type: rest.type }),
+                  rest?.className
+                )}
               />
             </FormControl>
 

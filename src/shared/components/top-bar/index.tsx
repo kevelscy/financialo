@@ -7,14 +7,15 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Avatar, AvatarFallback, AvatarImage } from '@/ui/avatar'
 import { BadgeEmailVerified } from '../user-bage-email-verified'
 import { DialogTrigger } from '../ui/dialog copy'
+import { buttonVariants } from '../ui/button'
 
 export const Topbar = () => {
-  const { user } = useUser()
+  const { user, isLoaded } = useUser()
 
   return (
     <header className='flex justify-end items-center p-4 gap-4 h-16'>
       <div className='flex flex-row-reverse justify-end gap-4 items-center'>
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground text-sidebar-text cursor-pointer flex gap-2 items-center'
@@ -90,15 +91,13 @@ export const Topbar = () => {
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
 
         <SignedOut>
           <SignInButton mode='modal'>
-            Iniciar sesión
-          </SignInButton>
-
-          <SignInButton mode='modal'>
-            Crear cuenta
+            <div className={buttonVariants({ variant: 'default' })}>
+              Iniciar sesión
+            </div>
           </SignInButton>
         </SignedOut>
 

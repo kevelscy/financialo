@@ -6,8 +6,8 @@ import { Button } from '@/ui/button'
 
 import { VoiceRecorder } from '../../(voice-record)/components/voice-recorder'
 import { DashboardSkeleton } from '../components/dashboard-sekeletons'
-import { AddExpenseModal } from '../components/add-expense-modal'
 import ExpenseDashboard from '../components/expense-dashboard'
+import { DialogAddTrasaction } from '@/app/(transactions)/components/add-transaction'
 
 export default function HomePage() {
   return (
@@ -35,7 +35,7 @@ export default function HomePage() {
         <div className='w-full mt-6 flex justify-center items-center gap-4'>
           <VoiceRecorder />
 
-          <AddExpenseModal>
+          <DialogAddTrasaction>
             <Button
               variant='outline'
               className='rounded-full px-6 py-6 border-dashed border-gray-300 flex items-center gap-2'
@@ -43,7 +43,7 @@ export default function HomePage() {
               <PlusIcon size={18} />
               <span>Añadir</span>
             </Button>
-          </AddExpenseModal>
+          </DialogAddTrasaction>
         </div>
 
       </div>
