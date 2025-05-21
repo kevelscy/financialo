@@ -11,39 +11,18 @@ import { Button } from '@/ui/button'
 import { Form } from '@/ui/form'
 
 import { useCreateTransaction } from '@/transactions/lib/hooks/use-create-transaction'
-import { TransactionType } from '../../lib/schemas'
+import { TransactionType } from '../../lib/schemas/transaction.schema'
+import { useListCategories } from '../../lib/hooks/use-list-categories'
 
 interface AddExpenseModalProps {
   children: React.ReactNode
 }
 
 export const DialogAddTrasaction = ({ children }: AddExpenseModalProps) => {
+  const { data: categories, loading: loadingCategories, error } = useListCategories()
   const { form, loading, onSubmit } = useCreateTransaction()
 
   const [open, setOpen] = useState(false)
-
-  const categories = [
-    {
-      label: '🥑 Comida',
-      value: 'food'
-    },
-    {
-      label: '🍔 Restaurantes',
-      value: 'restaurant'
-    },
-    {
-      label: '🚗 Transporte',
-      value: 'transport'
-    },
-    {
-      label: '💎 Lujos',
-      value: 'luxury'
-    },
-    {
-      label: '📦 Otrosporte',
-      value: 'other'
-    },
-  ]
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -96,10 +75,14 @@ export const DialogAddTrasaction = ({ children }: AddExpenseModalProps) => {
 
             <SelectForm
               form={form}
-              id='category'
+              id='categoryId'
               placeholder='Seleccione una categoría'
               label='Categoría'
-              items={categories}
+              loading={loadingCategories || loading}
+              items={categories?.result?.map?.(category => ({
+                label: `${category.emoji} ${category.name}`,
+                value: category.id
+              }))}
             />
 
             <CalendarForm

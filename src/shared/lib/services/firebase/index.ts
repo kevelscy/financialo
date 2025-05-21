@@ -9,9 +9,16 @@ import { QueryUsers } from './queries/users'
 let firebase: FirebaseApp
 let db: Firestore
 
+console.log({
+  window: typeof window !== 'undefined',
+  length: getApps().length
+})
+
 if (typeof window !== 'undefined' && !getApps().length) {
   firebase = initializeApp(firebaseConfig)
+
   db = getFirestore(firebase);
+  console.log({ firebase, db })
 }
 
 // export const analytics = getAnalytics(firebase)

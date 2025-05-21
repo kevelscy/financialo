@@ -8,30 +8,79 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/ui/card'
 import { Button } from '@/ui/button'
 
-import { ExpenseChart } from './expense-chart'
+import { GroupedTransactions, TransactionType } from '@/transactions/lib/schemas/transaction.schema'
+import { ExpenseChart } from './transaction-chart'
+import { formatAmount } from '@/shared/lib/utils/format-amount'
 
-interface ExpenseDashboardProps {
-  type?: 'expense' | 'income'
+interface Props {
+  type?: TransactionType
+  data: GroupedTransactions[]
+  loading: boolean
 }
 
-export default function ExpenseDashboard({ type = 'expense' }: ExpenseDashboardProps) {
+export default function TransactionsDashboard({ data, loading, type = TransactionType.EXPENSE }: Props) {
   const [period, setPeriod] = useState('this month')
 
-  const totalAmount = type === 'expense' ? 206.8 : 350.25
+  console.log({ data })
+
+  const getTotalAmount = (data: GroupedTransactions[], type: TransactionType) => {
+    if (!data?.length) return 0
+
+    let total = 0
+
+    if (type === TransactionType.EXPENSE) {
+      for (const group of data) {
+        for (const transaction of group.expenseTransactions) {
+          total += formatAmount(transaction.amount)
+        }
+      }
+    }
+
+    if (type === TransactionType.INCOME) {
+      for (const group of data) {
+        for (const transaction of group.incomeTransactions) {
+          total += formatAmount(transaction.amount)
+        }
+      }
+    }
+
+    return total
+  }
+
+  const getTotalAmountByCategory = (data: GroupedTransactions, type: TransactionType) => {
+    if (!data) return 0
+
+    let total = 0
+
+    if (type === TransactionType.EXPENSE) {
+      for (const transaction of data.expenseTransactions) {
+        total += formatAmount(transaction.amount)
+      }
+    }
+
+    if (type === TransactionType.INCOME) {
+      for (const transaction of data.incomeTransactions) {
+        total += formatAmount(transaction.amount)
+      }
+    }
+
+    return total
+  }
+
+  const totalAmount = getTotalAmount(data, type)
+
   const chartData =
-    type === 'expense'
-      ? [
-        { category: 'Comida', amount: 130.26, icon: '🥑' },
-        { category: 'Restaurantes', amount: 60.39, icon: '🍔' },
-        { category: 'Transporte', amount: 16.15, icon: '🚗' },
-        { category: 'Lujos', amount: 0, icon: '💎' },
-      ]
-      : [
-        { category: 'Salario', amount: 300, icon: '💼' },
-        { category: 'Freelance', amount: 50.25, icon: '💻' },
-        { category: 'Inversiones', amount: 0, icon: '📈' },
-        { category: 'Otros', amount: 0, icon: '🎁' },
-      ]
+    type === TransactionType.EXPENSE
+      ? data?.map(grouped => ({
+        category: grouped.category.name,
+        amount: getTotalAmountByCategory(grouped, TransactionType.EXPENSE),
+        icon: grouped.category.emoji
+      }))
+      : data?.map(grouped => ({
+        category: grouped.category.name,
+        amount: getTotalAmountByCategory(grouped, TransactionType.INCOME),
+        icon: grouped.category.emoji
+      }))
 
   const exportToExcel = () => {
     // Crear un array con los datos para la exportación
@@ -53,14 +102,20 @@ export default function ExpenseDashboard({ type = 'expense' }: ExpenseDashboardP
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.setAttribute('href', url)
-    link.setAttribute('download', `${type === 'expense' ? 'gastos' : 'ingresos'}_${period.replace(' ', '_')}.csv`)
+    link.setAttribute('download', `${type === TransactionType.EXPENSE ? 'gastos' : 'ingresos'}_${period.replace(' ', '_')}.csv`)
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
 
     toast.success('Exportación completada', {
-      description: `Se ha exportado el archivo CSV de ${type === 'expense' ? 'gastos' : 'ingresos'}.`,
+      description: `Se ha exportado el archivo CSV de ${type === TransactionType.EXPENSE ? 'gastos' : 'ingresos'}.`,
     })
+  }
+
+  if (loading) {
+    return <div>
+      Cargando
+    </div>
   }
 
   return (
@@ -68,11 +123,10 @@ export default function ExpenseDashboard({ type = 'expense' }: ExpenseDashboardP
       <Card>
         <CardContent className='pt-6'>
           <div className='flex justify-between items-center mb-4'>
-            <div className='text-muted-foreground'>{type === 'expense' ? 'Gastado' : 'Ingresado'}</div>
+            <div className='text-muted-foreground'>{type === TransactionType.EXPENSE ? 'Gastado' : 'Ingresado'}</div>
             <Select defaultValue={period} onValueChange={setPeriod}>
               <SelectTrigger className='w-[160px]'>
                 <SelectValue />
-                <ChevronDown className='h-4 w-4 opacity-50' />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='today'>Hoy</SelectItem>
@@ -94,10 +148,6 @@ export default function ExpenseDashboard({ type = 'expense' }: ExpenseDashboardP
           <div className='flex justify-between items-center mb-4'>
             <Button variant='outline' onClick={exportToExcel}>
               Exportar Excel
-            </Button>
-            <Button variant='outline'>
-              <ListFilter className='h-4 w-4 mr-2' />
-              Mostrar Lista
             </Button>
           </div>
         </CardContent>

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { Category, categorySchema } from './category.schema'
 
 export enum TransactionType {
   INCOME = 'INCOME', // ingresos
@@ -18,13 +19,23 @@ export const transactionSchema = z.object({
   type: transactionTypeSchema,
   amount: z.string(),
   description: z.string().min(3).max(100),
-  category: z.string(),
+  category: categorySchema,
   date: z.string(),
 })
 
-export const createTransactionSchema = transactionSchema.omit({ id: true })
+export const createTransactionSchema = transactionSchema.omit({ id: true, category: true }).extend({
+  categoryId: z.string().optional()
+})
 export const editTransactionSchema = transactionSchema.omit({ id: true })
 
 export type Transaction = z.infer<typeof transactionSchema>
 export type EditTransaction = z.infer<typeof editTransactionSchema>
 export type CreateTransaction = z.infer<typeof createTransactionSchema>
+
+export interface GroupedTransactions {
+  category: Omit<Category, 'userId'>
+  incomeTransactions: Transaction[]
+  expenseTransactions: Transaction[]
+  totalIncomeAmount: number
+  totalExpenseAmount: number
+}

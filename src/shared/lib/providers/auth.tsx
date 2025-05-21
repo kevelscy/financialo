@@ -14,6 +14,18 @@ export const AuthProvider = ({ children }) => {
         formFieldLabel__lastName: 'Apellido',
         formFieldInputPlaceholder__phoneNumber: 'Ingrese su numero telefónico',
         badge__upcomingPlan: 'Próximo',
+        formFieldInputPlaceholder__firstName: 'Nombre',
+        formFieldInputPlaceholder__lastName: 'Apellido',
+        formFieldLabel__username: 'Nombre de usuario',
+        formFieldLabel__phoneNumber: 'Numero de teléfono',
+        signUp: {
+          ...esMX.signUp,
+          continue: {
+            ...esMX.signUp.continue,
+            title: 'Rellene los campos faltantes',
+            subtitle: 'Por favor, complete los datos restantes para continuar.',
+          },
+        },
         commerce: {
           ...esMX.commerce,
           reSubscribe: 'Re-Subscribirse',

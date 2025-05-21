@@ -1,6 +1,7 @@
-import { QueryUsers } from '@/shared/lib/services/firebase'
 import { verifyWebhook } from '@clerk/nextjs/webhooks'
 import { NextRequest } from 'next/server'
+
+import { QueryUsers } from '@/shared/lib/services/firebase'
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,6 +9,7 @@ export async function POST(req: NextRequest) {
 
     const { id } = clerkEvent.data
     const eventType = clerkEvent.type
+
     console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
     console.log('Webhook payload:', clerkEvent.data)
 
