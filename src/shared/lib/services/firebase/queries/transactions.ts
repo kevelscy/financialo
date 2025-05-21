@@ -124,8 +124,6 @@ export const QueryTransactions = {
 
         const group = groupedMap.get(groupKey)!
 
-        console.log({ transaction })
-
         if (transaction.type === TransactionType.INCOME) {
           group.incomeTransactions.push(transaction)
           group.totalIncomeAmount += formatAmount(transaction.amount)

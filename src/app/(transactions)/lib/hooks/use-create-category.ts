@@ -10,8 +10,13 @@ import { QUERY_KEYS } from '@/shared/lib/consts/query-keys'
 
 import { CreateCategory, createCategorySchema } from '../schemas/category.schema'
 import { categoryServices } from '../services'
+import { aiServices } from '@/shared/lib/services/ai'
 
-export const useCreateCategory = () => {
+interface Props {
+  callbackOnSuccess: () => void
+}
+
+export const useCreateCategory = ({ callbackOnSuccess }) => {
   const { user } = useUser()
 
   const form = useForm<CreateCategory>({
@@ -23,7 +28,15 @@ export const useCreateCategory = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CATEGORIES.TABLE] })
   })
 
-  const onSubmit = form.handleSubmit(async (payload: CreateCategory) => mutate(payload))
+  const onSubmit = form.handleSubmit(async (payload: CreateCategory) => {
+    const res = await aiServices.generateCategoryIcon({ categoryName: payload.name })
+
+    mutate({
+      ...payload,
+      color: res.color,
+      emoji: res.emoji,
+    })
+  })
 
   useEffect(() => {
     if (isPending) {
@@ -37,6 +50,8 @@ export const useCreateCategory = () => {
       toast.success('Categoria registrada', {
         description: 'La categoria ha sido registrada correctamente.',
       })
+
+      callbackOnSuccess()
       return
     }
 

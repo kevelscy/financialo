@@ -36,7 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <ThemeProvider attribute='class' defaultTheme='ligth' disableTransitionOnChange>
               <Topbar />
 
-              <main className='min-h-svh'>{children}</main>
+              <main>{children}</main>
 
               <Toaster />
             </ThemeProvider>

@@ -8,6 +8,7 @@ import { cn } from '@/shared/lib/utils/tailwind'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/ui/select'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/ui/form'
 import { Skeleton } from '@/ui/skeleton'
+import { Plus } from 'lucide-react'
 
 export interface ISelectItem {
   label: string
@@ -31,6 +32,7 @@ export interface IGenericSelectProps<TForm> extends HTMLAttributes<HTMLDivElemen
   description?: string
   disabled?: boolean
   loading?: boolean
+  onAdd?: () => void
 }
 
 export function SelectForm<TForm = any>({
@@ -42,6 +44,7 @@ export function SelectForm<TForm = any>({
   form,
   tabIndex,
   classNameContainer,
+  onAdd,
   classNameSelect,
   classNameGroup,
   disabled,
@@ -135,6 +138,15 @@ export function SelectForm<TForm = any>({
                         </div>
                       </SelectItem>
                     ))
+                  }
+
+                  {
+                    onAdd && (
+                      <div onClick={onAdd} className="focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2 hover:bg-muted hover:text-primary">
+                        <Plus size={20} />
+                        Agregar
+                      </div>
+                    )
                   }
                 </SelectGroup>
               </SelectContent>

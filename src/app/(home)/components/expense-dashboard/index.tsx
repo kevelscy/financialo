@@ -11,6 +11,9 @@ import { Button } from '@/ui/button'
 import { GroupedTransactions, TransactionType } from '@/transactions/lib/schemas/transaction.schema'
 import { ExpenseChart } from './transaction-chart'
 import { formatAmount } from '@/shared/lib/utils/format-amount'
+import { cn } from '@/shared/lib/utils/tailwind'
+import { Separator } from '@/shared/components/ui/separator'
+import CountUp from '@/shared/components/ui/count-up'
 
 interface Props {
   type?: TransactionType
@@ -20,8 +23,6 @@ interface Props {
 
 export default function TransactionsDashboard({ data, loading, type = TransactionType.EXPENSE }: Props) {
   const [period, setPeriod] = useState('this month')
-
-  console.log({ data })
 
   const getTotalAmount = (data: GroupedTransactions[], type: TransactionType) => {
     if (!data?.length) return 0
@@ -120,40 +121,67 @@ export default function TransactionsDashboard({ data, loading, type = Transactio
 
   return (
     <div className='space-y-6'>
-      <Card>
-        <CardContent className='pt-6'>
-          <div className='flex justify-between items-center mb-4'>
-            <div className='text-muted-foreground'>{type === TransactionType.EXPENSE ? 'Gastado' : 'Ingresado'}</div>
-            <Select defaultValue={period} onValueChange={setPeriod}>
-              <SelectTrigger className='w-[160px]'>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='today'>Hoy</SelectItem>
-                <SelectItem value='this week'>Esta semana</SelectItem>
-                <SelectItem value='this month'>Este mes</SelectItem>
-                <SelectItem value='this year'>Este año</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      {/* <div className='flex justify-between items-center mb-4'>
+        <Select defaultValue={period} onValueChange={setPeriod}>
+          <SelectTrigger className='w-[160px]'>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='today'>Hoy</SelectItem>
+            <SelectItem value='this week'>Esta semana</SelectItem>
+            <SelectItem value='this month'>Este mes</SelectItem>
+            <SelectItem value='this year'>Este año</SelectItem>
+          </SelectContent>
+        </Select>
+      </div> */}
 
-          <div className='text-center mb-6'>
-            <div className='flex items-center justify-center'>
-              <span className='text-3xl text-muted-foreground'>$</span>
-              <span className='text-7xl font-bold'>{Math.floor(totalAmount)}</span>
-              <span className='text-3xl text-muted-foreground'>.{(totalAmount % 1).toFixed(2).substring(2)}</span>
-            </div>
-          </div>
+      <div className='text-center mb-6'>
+        <span className='text-muted-foreground'>Total</span>
 
-          <div className='flex justify-between items-center mb-4'>
-            <Button variant='outline' onClick={exportToExcel}>
-              Exportar Excel
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        <div className={cn(
+          'flex items-center justify-center',
+          type === TransactionType.EXPENSE && 'text-red-500',
+          type === TransactionType.INCOME && 'text-green-500',
+        )}>
+          <span className={cn(
+            'text-3xl text-muted-foreground',
+            type === TransactionType.EXPENSE && 'text-red-300',
+            type === TransactionType.INCOME && 'text-green-300',
+          )}>
+            $
+          </span>
 
-      <ExpenseChart data={chartData} />
+          <span className='text-7xl font-bold'>
+            {/* {Math.floor(totalAmount)} */}
+            <CountUp
+              from={0}
+              to={Math.floor(totalAmount)}
+              separator=","
+              direction="up"
+              duration={0.1}
+              className="count-up-text"
+            />
+          </span>
+
+          <span className={cn(
+            'text-3xl text-muted-foreground',
+            type === TransactionType.EXPENSE && 'text-red-300',
+            type === TransactionType.INCOME && 'text-green-300',
+          )}>
+            .{(totalAmount % 1).toFixed(2).substring(2)}
+          </span>
+        </div>
+      </div>
+
+      {/* <div className='flex justify-between items-center mb-4'>
+        <Button variant='outline' onClick={exportToExcel}>
+          Exportar Excel
+        </Button>
+      </div> */}
+
+      <Separator />
+
+      <ExpenseChart data={chartData} type={type} />
     </div>
   )
 }

@@ -3,7 +3,8 @@ import { z } from 'zod'
 export const categorySchema = z.object({
   id: z.string(),
   name: z.string(),
-  emoji: z.string().emoji(),
+  emoji: z.string().emoji().optional(),
+  color: z.string().optional(),
   userId: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),

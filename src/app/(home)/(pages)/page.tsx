@@ -21,9 +21,9 @@ export default function HomePage() {
   const { data, loading } = useListTransactionsGrouped()
 
   return (
-    <div className='container mx-auto px-4 py-6 max-w-md'>
-      <div className='flex flex-col items-center'>
-        <Tabs defaultValue='expenses' className='w-full'>
+    <div className='h-[calc(100dvh_-_64px)] mx-auto px-4 py-6 max-w-xl flex flex-col justify-center items-center'>
+      <div className='w-full flex flex-col items-center'>
+        <Tabs defaultValue={TransactionType.EXPENSE} className='w-full'>
           <TabsList className='grid w-full grid-cols-2 mb-8'>
             <TabsTrigger value={TransactionType.EXPENSE}>Gastos</TabsTrigger>
             <TabsTrigger value={TransactionType.INCOME}>Ingresos</TabsTrigger>
