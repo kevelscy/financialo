@@ -14,6 +14,7 @@ import { formatAmount } from '@/shared/lib/utils/format-amount'
 import { cn } from '@/shared/lib/utils/tailwind'
 import { Separator } from '@/shared/components/ui/separator'
 import CountUp from '@/shared/components/ui/count-up'
+import { CarouselBarsSkeletons } from '../loading-skeletons-with-shimmer/carousel-bars-skeletons'
 
 interface Props {
   type?: TransactionType
@@ -72,12 +73,12 @@ export default function TransactionsDashboard({ data, loading, type = Transactio
 
   const chartData =
     type === TransactionType.EXPENSE
-      ? data?.map(grouped => ({
+      ? data?.map?.(grouped => ({
         category: grouped.category.name,
         amount: getTotalAmountByCategory(grouped, TransactionType.EXPENSE),
         icon: grouped.category.emoji
       }))
-      : data?.map(grouped => ({
+      : data?.map?.(grouped => ({
         category: grouped.category.name,
         amount: getTotalAmountByCategory(grouped, TransactionType.INCOME),
         icon: grouped.category.emoji
@@ -181,7 +182,11 @@ export default function TransactionsDashboard({ data, loading, type = Transactio
 
       <Separator />
 
-      <ExpenseChart data={chartData} type={type} />
+      {
+        !data?.length
+          ? <CarouselBarsSkeletons isEmptyData />
+          : <ExpenseChart data={chartData} type={type} />
+      }
     </div>
   )
 }

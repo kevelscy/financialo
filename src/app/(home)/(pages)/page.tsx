@@ -9,16 +9,19 @@ import { cn } from '@/shared/lib/utils/tailwind'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/tabs'
 import { Button, buttonVariants } from '@/ui/button'
 
+import { useListTransactionsGrouped } from '@/transactions/lib/hooks/use-list-transactions-grouped'
+import { DialogAddTrasaction } from '@/transactions/components/add-transaction'
+import { TransactionType } from '@/transactions/lib/schemas/transaction.schema'
+
+import { LoadingSkeletonsWithShimmer } from '../components/loading-skeletons-with-shimmer'
 import { VoiceRecorder } from '../../(voice-record)/components/voice-recorder'
 import { DashboardSkeleton } from '../components/dashboard-sekeletons'
 import TransactionsDashboard from '../components/expense-dashboard'
 
-import { DialogAddTrasaction } from '@/transactions/components/add-transaction'
-import { TransactionType } from '@/transactions/lib/schemas/transaction.schema'
-import { useListTransactionsGrouped } from '@/app/(transactions)/lib/hooks/use-list-transactions-grouped'
-
 export default function HomePage() {
   const { data, loading } = useListTransactionsGrouped()
+
+  if (loading) return <LoadingSkeletonsWithShimmer />
 
   return (
     <div className='h-[calc(100dvh_-_64px)] mx-auto px-4 py-6 max-w-xl flex flex-col justify-center items-center'>
