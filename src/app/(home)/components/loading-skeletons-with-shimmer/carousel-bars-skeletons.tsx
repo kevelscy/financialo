@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface Props {
   isEmptyData?: boolean
@@ -28,9 +28,7 @@ export const CarouselBarsSkeletons = ({ isEmptyData }: Props) => {
       </div>
 
       <div className='w-full text-center'>
-        {
-          isEmptyData && <span className='text-muted-foreground text-sm'>Registre su primera trasacción</span>
-        }
+        {isEmptyData && <span className='text-muted-foreground text-sm'>Registre su primera trasacción</span>}
       </div>
     </div>
   )

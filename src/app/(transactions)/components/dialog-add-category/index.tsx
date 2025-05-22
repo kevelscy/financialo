@@ -1,7 +1,6 @@
 'use client'
 
 import { Dispatch, SetStateAction } from 'react'
-import dynamic from 'next/dynamic';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/ui/dialog'
 import { InputForm } from '@/ui/input-form'
@@ -9,8 +8,7 @@ import { Separator } from '@/ui/separator'
 import { Button } from '@/ui/button'
 import { Form } from '@/ui/form'
 
-import { useCreateCategory } from '../../lib/hooks/use-create-category'
-
+import { useCreateCategory } from '@/transactions/lib/hooks/use-create-category'
 
 interface Props {
   open: boolean,
