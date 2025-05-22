@@ -15,7 +15,7 @@ export const CarouselBarsSkeletons = ({ isEmptyData }: Props) => {
 
         {/* Carousel items */}
         <div className='flex space-x-4 overflow-hidden py-4 px-6'>
-          <div className='flex-shrink-0 w-32 h-[30dvh] bg-zinc-200 rounded-lg p-4 flex flex-col items-center animate-pulse' />
+          <div className='flex-shrink-0 w-32 h-[30dvh] bg-zinc-200 rounded-lg p-4 hidden md:flex flex-col items-center animate-pulse' />
           <div className='flex-shrink-0 w-32 h-[30dvh] bg-zinc-200 rounded-lg p-4 flex flex-col items-center animate-pulse' />
           <div className='flex-shrink-0 w-32 h-[30dvh] bg-zinc-200 rounded-lg p-4 flex flex-col items-center animate-pulse' />
         </div>

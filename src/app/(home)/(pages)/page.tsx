@@ -21,6 +21,7 @@ import TransactionsDashboard from '../components/expense-dashboard'
 export default function HomePage() {
   const { data, loading } = useListTransactionsGrouped()
 
+
   if (loading) return <LoadingSkeletonsWithShimmer />
 
   return (

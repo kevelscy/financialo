@@ -1,7 +1,10 @@
 'use client'
 
+import { Mic, Plus } from 'lucide-react'
+
 import { Separator } from '@/shared/components/ui/separator'
-import { ChevronLeft, ChevronRight, Mic, Plus } from 'lucide-react'
+
+import { CarouselBarsSkeletons } from './carousel-bars-skeletons'
 
 export const LoadingSkeletonsWithShimmer = () => {
   return (
@@ -12,15 +15,15 @@ export const LoadingSkeletonsWithShimmer = () => {
         <div className='flex items-start mt-2'>
           <div className='relative overflow-hidden'>
             <div className='flex items-start'>
-              <div className='h-10 w-20 bg-gray-200 rounded relative overflow-hidden animate-pulse'>
+              <div className='h-10 w-16 md:w-20 bg-gray-200 rounded relative overflow-hidden animate-pulse'>
                 <div className='absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200'></div>
               </div>
 
-              <div className='h-32 w-52 bg-gray-200 rounded mx-1 relative overflow-hidden animate-pulse'>
+              <div className='h-32 w-32 md:w-52 bg-gray-200 rounded mx-1 relative overflow-hidden animate-pulse'>
                 <div className='absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200'></div>
               </div>
 
-              <div className='h-10 w-20 bg-gray-200 rounded relative overflow-hidden animate-pulse'>
+              <div className='h-10 w-16 md:w-20 bg-gray-200 rounded relative overflow-hidden animate-pulse'>
                 <div className='absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200'></div>
               </div>
             </div>
@@ -32,26 +35,7 @@ export const LoadingSkeletonsWithShimmer = () => {
       <Separator />
 
       {/* Carousel skeleton */}
-      <div className='relative'>
-        <div className='flex items-center'>
-          {/* Left arrow */}
-          <button className='absolute left-0 z-10 p-1 rounded-full bg-white shadow-md'>
-            <ChevronLeft className='h-5 w-5 text-gray-400' />
-          </button>
-
-          {/* Carousel items */}
-          <div className='flex space-x-4 overflow-hidden py-4 px-6'>
-            <div className='flex-shrink-0 w-32 h-[30dvh] bg-zinc-200 rounded-lg p-4 flex flex-col items-center animate-pulse' />
-            <div className='flex-shrink-0 w-32 h-[30dvh] bg-zinc-200 rounded-lg p-4 flex flex-col items-center animate-pulse' />
-            <div className='flex-shrink-0 w-32 h-[30dvh] bg-zinc-200 rounded-lg p-4 flex flex-col items-center animate-pulse' />
-          </div>
-
-          {/* Right arrow */}
-          <button className='absolute right-0 z-10 p-1 rounded-full bg-white shadow-md'>
-            <ChevronRight className='h-5 w-5 text-gray-400' />
-          </button>
-        </div>
-      </div>
+      <CarouselBarsSkeletons />
 
       {/* Action buttons */}
       <div className='flex justify-center items-center mt-6 space-x-4'>
