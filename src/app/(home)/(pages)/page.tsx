@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/tabs'
 import { Button, buttonVariants } from '@/ui/button'
 
 import { useListTransactionsGrouped } from '@/transactions/lib/hooks/use-list-transactions-grouped'
-import { DialogAddTrasaction } from '@/transactions/components/add-transaction'
+import { DialogAddTransaction } from '@/transactions/components/add-transaction'
 import { TransactionType } from '@/transactions/lib/schemas/transaction.schema'
 
 import { LoadingSkeletonsWithShimmer } from '../components/loading-skeletons-with-shimmer'
@@ -20,7 +20,6 @@ import TransactionsDashboard from '../components/expense-dashboard'
 
 export default function HomePage() {
   const { data, loading } = useListTransactionsGrouped()
-
 
   if (loading) return <LoadingSkeletonsWithShimmer />
 
@@ -50,7 +49,7 @@ export default function HomePage() {
           <VoiceRecorder />
 
           <SignedIn>
-            <DialogAddTrasaction>
+            <DialogAddTransaction>
               <Button
                 variant='outline'
                 className='rounded-full px-6 py-6 border-dashed border-gray-300 flex items-center gap-2'
@@ -58,7 +57,7 @@ export default function HomePage() {
                 <PlusIcon size={18} />
                 <span>Añadir</span>
               </Button>
-            </DialogAddTrasaction>
+            </DialogAddTransaction>
           </SignedIn>
 
           <SignedOut>

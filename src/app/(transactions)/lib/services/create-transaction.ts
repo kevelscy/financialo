@@ -7,6 +7,8 @@ interface Props extends CreateTransaction { }
 
 export const createTransaction = async (userId: string, payload: Props): Promise<Body<Transaction>> => {
   try {
+    console.log('createTransaction', { userId, payload })
+
     const res = await QueryTransactions.create(userId, payload)
     return { result: res }
   } catch (error) {

@@ -24,19 +24,19 @@ export const useCreateCategory = ({ callbackOnSuccess }) => {
   })
 
   const { data, isPending, isSuccess, error, mutate } = useMutation({
-    mutationFn: (payload: CreateCategory) => categoryServices.create(user.id, payload),
+    mutationFn: async (payload: CreateCategory) => {
+      const res = await aiServices.generateCategoryIcon({ categoryName: payload.name })
+
+      categoryServices.create(user.id, {
+        ...payload,
+        color: res.color,
+        emoji: res.emoji,
+      })
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CATEGORIES.TABLE] })
   })
 
-  const onSubmit = form.handleSubmit(async (payload: CreateCategory) => {
-    const res = await aiServices.generateCategoryIcon({ categoryName: payload.name })
-
-    mutate({
-      ...payload,
-      color: res.color,
-      emoji: res.emoji,
-    })
-  })
+  const onSubmit = form.handleSubmit(async (payload: CreateCategory) => mutate(payload))
 
   useEffect(() => {
     if (isPending) {

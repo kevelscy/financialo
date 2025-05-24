@@ -67,8 +67,8 @@ export const ExpenseChart = ({ data, type }: ExpenseChartProps) => {
         })}
       </CarouselContent>
 
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className='flex -left-3 backdrop-blur-sm mt-4' />
+      <CarouselNext className='flex -right-3 backdrop-blur-sm mt-4' />
     </Carousel>
   )
 }

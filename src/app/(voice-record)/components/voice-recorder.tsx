@@ -1,41 +1,22 @@
 'use client'
 
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Mic, MicOff, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 import { Button } from '@/ui/button'
+import { useGenerateVoiceTransaction } from '@/shared/lib/hooks/use-generate-voice-transaction'
+import { useListCategories } from '@/app/(transactions)/lib/hooks/use-list-categories'
+import { CreateTransaction, TransactionType } from '@/app/(transactions)/lib/schemas/transaction.schema'
+import { useCreateTransaction } from '@/app/(transactions)/lib/hooks/use-create-transaction'
 
 export const VoiceRecorder = () => {
-  const [isProcessing, setIsProcessing] = useState(false)
+  const { data, loading: loadingTransaction, createTransaction } = useCreateTransaction({})
+  const { data: categories, loading: loadingCategories, error } = useListCategories()
 
-  const commands = [
-    {
-      command: 'gasto de * en *',
-      callback: (amount: string, category: string) => {
-        processExpense(amount, category, 'expense')
-      },
-    },
-    {
-      command: 'gasté * en *',
-      callback: (amount: string, category: string) => {
-        processExpense(amount, category, 'expense')
-      },
-    },
-    {
-      command: 'ingreso de * por *',
-      callback: (amount: string, category: string) => {
-        processExpense(amount, category, 'income')
-      },
-    },
-    {
-      command: 'recibí * por *',
-      callback: (amount: string, category: string) => {
-        processExpense(amount, category, 'income')
-      },
-    },
-  ]
+  const { generateTransaction, loading } = useGenerateVoiceTransaction()
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const {
     transcript,
@@ -43,7 +24,7 @@ export const VoiceRecorder = () => {
     resetTranscript,
     isMicrophoneAvailable,
     browserSupportsSpeechRecognition,
-  } = useSpeechRecognition({ commands })
+  } = useSpeechRecognition()
 
   const processExpense = (amount: string, category: string, type: 'expense' | 'income') => {
     setIsProcessing(true)
@@ -74,6 +55,62 @@ export const VoiceRecorder = () => {
       })
     }
   }
+
+  useEffect(() => {
+    (async () => {
+      if (transcript) {
+        if (listening) return
+
+        const categoryNames = categories?.result?.map?.(c => c.name)
+
+        const previewTransactions = await generateTransaction(transcript, categoryNames)
+
+        // if (previewTransactions) {
+        //   toast('Transacciones generadas', {
+        //     description: `Se generaron ${previewTransactions.length} transacciones.`,
+        //   })
+        // }
+
+        if (previewTransactions.length === 0) {
+          toast.error('No se encontraron transacciones válidas')
+          return
+        }
+
+        const transactionsWithNewCategories: CreateTransaction[] = []
+        const transactionsWithCurrentCategories: CreateTransaction[] = []
+
+        previewTransactions.forEach(tx => {
+
+          const category = categories?.result?.find(c => c.name === tx.category)
+          console.log({ tx })
+          console.log({ category })
+
+          if (category) {
+            transactionsWithCurrentCategories.push({
+              ...tx,
+              categoryId: category.id,
+            })
+          } else {
+            transactionsWithNewCategories.push({
+              ...tx
+            })
+          }
+        })
+
+        for (const element of transactionsWithCurrentCategories) {
+          await createTransaction(element)
+        }
+
+
+        // previewTransactions.forEach(tx => {
+        //   toast(`${tx.type === TransactionType.EXPENSE ? 'Gasto' : 'Ingreso'}: $${tx.amount} - ${tx.description}`, {
+        //     description: `Categoría: ${tx.category}`,
+        //   })
+        // })
+
+      }
+    })()
+  }, [transcript, listening])
 
   // Si el navegador no soporta reconocimiento de voz
   if (!browserSupportsSpeechRecognition) {

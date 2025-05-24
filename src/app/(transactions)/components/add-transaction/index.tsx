@@ -15,16 +15,16 @@ import { TransactionType } from '../../lib/schemas/transaction.schema'
 import { useListCategories } from '../../lib/hooks/use-list-categories'
 import { DialogAddCategory } from '../dialog-add-category'
 
-interface AddExpenseModalProps {
+interface Props {
   children: React.ReactNode
 }
 
-export const DialogAddTrasaction = ({ children }: AddExpenseModalProps) => {
-  const { data: categories, loading: loadingCategories, error } = useListCategories()
-  const { form, loading, onSubmit } = useCreateTransaction()
-
-  const [open, setOpen] = useState(false)
+export const DialogAddTransaction = ({ children }: Props) => {
   const [openCategory, setOpenCategory] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const { data: categories, loading: loadingCategories, error } = useListCategories()
+  const { form, loading, onSubmit } = useCreateTransaction({ callbackOnSuccess: () => setOpen(false) })
 
   return (
     <>
@@ -83,12 +83,12 @@ export const DialogAddTrasaction = ({ children }: AddExpenseModalProps) => {
 
               <SelectForm
                 form={form}
-                disabled={loading}
                 id='categoryId'
-                placeholder='Seleccione una categoría'
                 label='Categoría'
-                onAdd={() => setOpenCategory(true)}
+                disabled={loading}
                 loading={loadingCategories}
+                onAdd={() => setOpenCategory(true)}
+                placeholder='Seleccione una categoría'
                 items={categories?.result?.map?.(category => ({
                   label: `${category.emoji} ${category.name}`,
                   value: category.id

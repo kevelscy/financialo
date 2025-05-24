@@ -20,11 +20,12 @@ export const transactionSchema = z.object({
   amount: z.string(),
   description: z.string().min(3).max(100),
   category: categorySchema,
-  date: z.string(),
+  date: z.date(),
 })
 
 export const createTransactionSchema = transactionSchema.omit({ id: true, category: true }).extend({
-  categoryId: z.string().optional()
+  categoryId: z.string().optional(),
+  date: z.date(),
 })
 export const editTransactionSchema = transactionSchema.omit({ id: true })
 

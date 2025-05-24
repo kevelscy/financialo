@@ -12,23 +12,34 @@ import { CreateTransaction, createTransactionSchema, TransactionType } from '../
 import { Category } from '../schemas/category.schema'
 import { transactionServices } from '../services'
 
-export const useCreateTransaction = (categories?: Category[]) => {
+interface Props {
+  callbackOnSuccess?: () => void
+}
+
+export const useCreateTransaction = ({ callbackOnSuccess }: Props) => {
   const { user } = useUser()
 
   const form = useForm<CreateTransaction>({
     resolver: zodResolver(createTransactionSchema),
     defaultValues: {
       type: TransactionType.EXPENSE,
-      date: new Date().toISOString()
+      date: new Date()
     }
   })
+
 
   const { data, isPending, isSuccess, error, mutate } = useMutation({
     mutationFn: (payload: CreateTransaction) => transactionServices.create(user.id, payload),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.TRANSACTIONS.LIST] })
   })
 
-  const onSubmit = form.handleSubmit(async (payload: CreateTransaction) => mutate(payload))
+  const onSubmit = form.handleSubmit(async (payload: CreateTransaction) => {
+    mutate({
+      ...payload,
+    })
+  })
+
+  const createTransaction = async (payload: CreateTransaction) => mutate(payload)
 
   useEffect(() => {
     if (isPending) {
@@ -42,6 +53,8 @@ export const useCreateTransaction = (categories?: Category[]) => {
       toast.success('Transacción registrada', {
         description: 'La transacción ha sido registrada correctamente.',
       })
+
+      callbackOnSuccess?.()
       return
     }
 
@@ -56,6 +69,7 @@ export const useCreateTransaction = (categories?: Category[]) => {
     form,
     error,
     onSubmit,
+    createTransaction,
     loading: isPending
   }
 }

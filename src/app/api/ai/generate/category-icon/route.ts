@@ -18,8 +18,6 @@ const google = createGoogleGenerativeAI({
 //   compatibility: 'strict', // strict mode, enable when using the OpenAI API
 // })
 
-const EMOJI_REGEX = /^(\p{Emoji})\s+#([A-Fa-f0-9]{6})$/u
-
 export async function POST(req: Request) {
   try {
     const { categoryName }: { categoryName?: string } = await req.json()
@@ -36,8 +34,7 @@ export async function POST(req: Request) {
       // model: openai('gpt-4o-mini'),
       // model: deepseek('deepseek-chat'), 
       model: google('gemini-1.5-flash'),
-      system: `
-        You are an emoji/color generator. Return EXCLUSIVELY in this RAW FORMAT:
+      system: `You are an emoji/color generator. Return EXCLUSIVELY in this RAW FORMAT:
         "[EMOJI][SPACE][HEX_COLOR]"
 
         RULES:

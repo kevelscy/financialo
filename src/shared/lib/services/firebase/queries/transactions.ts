@@ -40,10 +40,11 @@ export const QueryTransactions = {
 
       const docRef = await addDoc(transactionRef, {
         ...payload,
+        date: payload?.date?.toISOString?.() || new Date()?.toISOString?.(),
         category: categoryData || null,
         deletedAt: null,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        createdAt: new Date()?.toISOString?.(),
+        updatedAt: new Date()?.toISOString?.()
       })
 
       return { id: docRef.id, ...payload }
