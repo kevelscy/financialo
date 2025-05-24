@@ -82,8 +82,6 @@ export const VoiceRecorder = () => {
         previewTransactions.forEach(tx => {
 
           const category = categories?.result?.find(c => c.name === tx.category)
-          console.log({ tx })
-          console.log({ category })
 
           if (category) {
             transactionsWithCurrentCategories.push({
@@ -137,7 +135,14 @@ export const VoiceRecorder = () => {
   return (
     <div className='flex flex-col items-center gap-2'>
       {transcript && !isProcessing && (
-        <div className='bg-white p-2 rounded-lg shadow-md text-sm max-w-[200px] text-center'>{transcript}</div>
+        <div
+          onClick={() => {
+            resetTranscript()
+          }}
+          className='bg-white p-2 rounded-lg shadow-md text-sm max-w-[200px] text-center'
+        >
+          {transcript}
+        </div>
       )}
 
       <Button
