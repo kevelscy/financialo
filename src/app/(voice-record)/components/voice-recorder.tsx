@@ -5,11 +5,13 @@ import { Mic, MicOff, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-import { Button } from '@/ui/button'
 import { useGenerateVoiceTransaction } from '@/shared/lib/hooks/use-generate-voice-transaction'
-import { useListCategories } from '@/app/(transactions)/lib/hooks/use-list-categories'
-import { CreateTransaction, TransactionType } from '@/app/(transactions)/lib/schemas/transaction.schema'
-import { useCreateTransaction } from '@/app/(transactions)/lib/hooks/use-create-transaction'
+
+import { Button } from '@/ui/button'
+
+import { useCreateTransaction } from '@/transactions/lib/hooks/use-create-transaction'
+import { CreateTransaction } from '@/transactions/lib/schemas/transaction.schema'
+import { useListCategories } from '@/transactions/lib/hooks/use-list-categories'
 
 export const VoiceRecorder = () => {
   const { data, loading: loadingTransaction, createTransaction } = useCreateTransaction({})
@@ -80,7 +82,6 @@ export const VoiceRecorder = () => {
         const transactionsWithCurrentCategories: CreateTransaction[] = []
 
         previewTransactions.forEach(tx => {
-
           const category = categories?.result?.find(c => c.name === tx.category)
 
           if (category) {
